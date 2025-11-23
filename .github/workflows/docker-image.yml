@@ -1,0 +1,34 @@
+name: Build and Upload Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  build-and-export:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Build the Docker Image
+      # We tag it 'my-image:latest' so we can reference it in the next step
+      - name: Build Docker Image
+        run: docker build -t hexstrike:latest .
+
+      # 3. Extract/Save the image to a tar file
+      # 'docker save' exports the image to a tarball
+      - name: Save Docker Image to File
+        run: docker save -o my-image.tar my-image:latest
+
+      # 4. Upload the tar file as an artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hexstrike-image-artifact
+          path: hexstrike.tar
+          retention-days: 1 # Optional: Limits storage usage
+          compression-level: 6 # Optional: 0-9 (default is 6)
