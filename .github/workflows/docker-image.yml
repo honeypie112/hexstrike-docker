@@ -22,7 +22,7 @@ jobs:
       # 3. Extract/Save the image to a tar file
       # 'docker save' exports the image to a tarball
       - name: Save Docker Image to File
-        run: docker save -o my-image.tar my-image:latest
+        run: docker save -o hexstrike.tar hexstrike:latest
 
       # 4. Upload the tar file as an artifact
       - name: Upload Artifact
